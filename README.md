@@ -1,209 +1,121 @@
-### Kopi Suite — Build, Run, and Integrate
+### Kopi Suite — Quick Start (Beginner Friendly)
 
-Kopi is a suite of Java tools and libraries that includes:
-- **KJC**: a Java compiler
-- **XKOPI**: Java/SQL integration tools
-- **VKOPI**: UI/runtime libraries
-- **Bytecode tools**: classfile manipulation, optimizer, SSA, assembler/disassembler
-- **Build tools**: lexer/parser generators (JFlex/ANTLR), options/messages generators, etc.
-
-This repo is Gradle-based (wrapper included) and also contains legacy Make/Ant build scripts.
+Follow these steps exactly. Copy/paste the commands in your terminal.
 
 ---
 
-## TL;DR (Linux/macOS)
+## 1) Install Java
+
+- You need Java 8 or newer. To check:
 
 ```bash
-# 1) Prerequisites
-sdk install java 8.0.392-open   # or use any JDK 8+ installed on your system
+java -version
+```
 
-# 2) Prepare output and external libs directories (adjust paths as you like)
+If you don’t have it, install JDK 8 or 11 (your OS package manager or SDKMAN).
+
+---
+
+## 2) Get the code
+
+```bash
+git clone https://github.com/your-org-or-fork/kopi.git
+cd kopi
+```
+
+If you already have the code open, just `cd` into the project directory.
+
+---
+
+## 3) Create folders and set environment
+
+These two folders are where the build writes files and where you’ll put helper libraries.
+
+```bash
 mkdir -p .classroot extlibs
 export CLASSROOT="$(pwd)/.classroot"
 export EXTDIRS="$(pwd)/extlibs"
+```
 
-# 3) Put required third‑party jars in $EXTDIRS
-#   Required for many tools (minimum):
-#   - org.jdom:jdom:1.1.3
-#   - gnu.getopt:java-getopt:1.0.14
-#   - JFlex 1.4.x (e.g., de.jflex:jflex:1.4.3)
-#   Optional/feature-specific: JavaMail, Activation, HylaFax client, etc.
+Tip for Windows (PowerShell):
+```powershell
+$env:CLASSROOT = "$PWD\.classroot"
+$env:EXTDIRS   = "$PWD\extlibs"
+```
 
-# 4) Build everything into $CLASSROOT
+---
+
+## 4) Download two helper libraries (one-time)
+
+Put these .jar files into the `extlibs` folder:
+- JDOM 1.1.3 (file name like `jdom-1.1.3.jar`)
+- GNU Getopt 1.0.14 (file name like `java-getopt-1.0.14.jar`)
+
+How to get them quickly (example using Maven Central direct downloads or your browser):
+- Search the web for: “jdom 1.1.3 jar download” and “java-getopt 1.0.14 jar download”
+- Save both jars into the `extlibs` directory you created in step 3.
+
+You can add more later if you use advanced features, but these two are enough to start.
+
+---
+
+## 5) Build the project (one command)
+
+```bash
 ./gradlew run
+```
 
-# 5) Run a tool, e.g. KJC Java compiler
+This will:
+- generate sources (lexers/parsers/options/messages)
+- compile everything
+- put all compiled classes into `.classroot`
+
+If it fails with “CLASSROOT is null”, re-run step 3 to set the variables, then run again.
+
+---
+
+## 6) Try a tool (KJC Java compiler)
+
+```bash
 java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.kopi.comp.kjc.Main -help
 ```
 
-Windows PowerShell: set environment variables with `$env:CLASSROOT` and `$env:EXTDIRS` and use `gradlew.bat`.
+You should see usage/help text. That confirms your build worked.
 
----
-
-## Requirements
-
-- **JDK**: 8+ (JDK 8 or 11 recommended). If compiling explicitly for Java 7, set `JDK_7` to a valid JDK 7 home.
-- **Gradle**: Wrapper provided (Gradle 7.2), no local install needed.
-- **Environment variables (required/important):**
-  - `CLASSROOT`: absolute path where compiled/generated classes and resources are written.
-  - `EXTDIRS`: colon/semicolon-separated directory list with required external jars (see below).
-
-External jars you’ll typically need in `EXTDIRS`:
-- **JDOM**: `org.jdom:jdom:1.1.3`
-- **GNU Getopt**: `gnu.getopt:java-getopt:1.0.14`
-- **JFlex 1.4.x**: e.g., `de.jflex:jflex:1.4.3` (Kopi targets 1.4)
-- Optional (feature-specific): JavaMail, Activation (JAF), IBM BigDecimal (for XKOPI), HylaFAX Java client, MESP expression parser, etc.
-
-Notes:
-- Gradle build automatically adds jars found under each directory in `EXTDIRS` to the runtime classpath.
-- Several tools are launched via `java` with `-Djava.ext.dirs=$EXTDIRS` to load these jars.
-
----
-
-## Building
-
-Kopi supports three build paths. Prefer the Gradle wrapper.
-
-### A) Gradle (recommended)
-
+To compile a sample file:
 ```bash
-export CLASSROOT="/absolute/path/to/.classroot"
-export EXTDIRS="/absolute/path/to/extlibs"
-
-./gradlew run      # default build; generates sources, compiles, and stages artifacts into $CLASSROOT
-
-# Build only a subset by package or folder (faster iterative builds):
-./gradlew -Ppackage=org.kopi.kopi.comp.kjc run
-./gradlew -Pfolder=src/org/kopi/kopi/comp/kjc run
-
-# Cleaning
-./gradlew clean            # clean Gradle outputs
-./gradlew clean-classes    # clean compiled classes
-```
-
-Notes:
-- The build writes outputs to `CLASSROOT`. Keep this directory stable to avoid unnecessary rebuilds.
-- Vaadin/UI parts resolve from Maven Central and Vaadin Addons; other classic dependencies come from `EXTDIRS`.
-
-### B) Make (legacy)
-
-```bash
-export CLASSROOT="/absolute/path/to/.classroot"
-export EXTDIRS="/absolute/path/to/extlibs"
-make               # from repo root; delegates to src/org/kopi
-```
-
-### C) Ant (legacy)
-
-```bash
-export CLASSROOT="/absolute/path/to/.classroot"
-export EXTDIRS="/absolute/path/to/extlibs"
-ant -f build.xml   # from repo root or src/build.xml
-```
-
----
-
-## Running the tools
-
-After a successful `./gradlew run`, you can invoke tools directly. Use `-Djava.ext.dirs=$EXTDIRS` so Java can find required third‑party jars; use `-cp $CLASSROOT` to load Kopi classes.
-
-- **KJC (Java compiler)**
-```bash
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" \
-  org.kopi.kopi.comp.kjc.Main -help
-
-# Example: compile a file and emit class files under out/
+echo 'public class Hello { public static void main(String[] a){ System.out.println("Hi"); }}' > Hello.java
 mkdir -p out
 java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" \
-  org.kopi.kopi.comp.kjc.Main -d out src/main/java/Hello.java
+  org.kopi.kopi.comp.kjc.Main -d out Hello.java
 ```
-
-- **SQLC / XKJC (SQL and Java+SQL tools)**
-```bash
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.xkopi.comp.sqlc.Main -help
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.xkopi.comp.xkjc.Main -help
-```
-
-- **Bytecode tools**
-```bash
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.bytecode.dis.Main -help   # Disassembler
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.bytecode.ksm.Main -help   # Assembler
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.bytecode.optimize.Main -help
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.bytecode.ssa.Main -help
-```
-
-- **Build-time generators**
-```bash
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.compiler.tools.msggen.Main path/to/Messages.xml
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" org.kopi.compiler.tools.optgen.Main  path/to/Options.xml
-java -Djava.ext.dirs="$EXTDIRS" -cp "$CLASSROOT" JFlex.Main -skel "$CLASSROOT/org/kopi/compiler/skeleton.shared" path/to/Scanner.flex
-```
-
-Tip: There is a generic dispatcher `org.kopi.drivers.kopi.Main` which tries to run `org.kopi.<your.module>.Main`, e.g. `compiler.tools.msggen`. For clarity and better error handling, prefer calling tool Main classes explicitly as above.
 
 ---
 
-## Packaging a jar (optional)
+## 7) Use Kopi in your own project (simplest way)
 
-The Gradle build writes compiled classes to `CLASSROOT`. If you want a single jar for consumption:
+Option A: Add the compiled classes as a jar to your project.
 
 ```bash
 mkdir -p build
-jar cfv build/kopi-all-classes.jar -C "$CLASSROOT" .
+jar cf build/kopi-all-classes.jar -C "$CLASSROOT" .
 ```
 
-Then use `build/kopi-all-classes.jar` in your downstream projects (see integration below). Keep external jars from `EXTDIRS` alongside it.
+Then copy `build/kopi-all-classes.jar` and your `extlibs/*.jar` into your app’s `libs/` folder and add them to your project classpath (IDE or build tool).
+
+Option B: Call Kopi tools from your build.
+- Point your build (Gradle/Maven) to `CLASSROOT` as a classpath entry
+- When running tools with `java`, pass `-Djava.ext.dirs=/path/to/extlibs`
+
+Start simple with Option A. Move to Option B when you want to automate.
 
 ---
 
-## Using Kopi in your projects
+## Common issues
 
-You can integrate Kopi in two ways: as runtime libraries or as build-time tools.
-
-### 1) As runtime/library dependency (Gradle example)
-
-Place `kopi-all-classes.jar` and any required third‑party jars into your project’s `libs/` directory, then add:
-
-```groovy
-repositories { flatDir { dirs 'libs' } }
-
-dependencies {
-  implementation files('libs/kopi-all-classes.jar')
-  implementation fileTree(dir: 'libs', include: ['*.jar'])  // pulls JDOM, getopt, etc. you placed in libs/
-}
-```
-
-### 2) As build-time tools (Gradle JavaExec tasks)
-
-If you want to run KJC or the generators during your build, add tasks that point to your local Kopi build output and EXTDIRS:
-
-```groovy
-def kopiClassroot = file('/absolute/path/to/kopi/.classroot')
-def extDirs = file('/absolute/path/to/kopi/extlibs')
-
-tasks.register('kjc', JavaExec) {
-  mainClass = 'org.kopi.kopi.comp.kjc.Main'
-  classpath = files(kopiClassroot)
-  jvmArgs "-Djava.ext.dirs=${extDirs.absolutePath}"
-  args '-d', "$buildDir/classes/java/main", 'src/main/java/Hello.java'
-}
-```
-
-You can mirror this pattern for `msggen`, `optgen`, `JFlex.Main`, etc.
-
-### 3) As a source/submodule (advanced)
-
-Add this repository as a Git submodule and either:
-- add `kopi/src` to your project’s compile sources, or
-- create a dedicated build that runs `./gradlew run` in Kopi first, then consumes `CLASSROOT` via `files(kopiClassroot)`.
-
----
-
-## Troubleshooting
-
-- NullPointerException in Gradle due to `classRoot!!`: ensure `CLASSROOT` is set to an existing directory.
-- ClassNotFoundException for JDOM/Getopt/JFlex: ensure the jars are present under `EXTDIRS` and that you’re passing `-Djava.ext.dirs=$EXTDIRS` when launching tools.
-- Building only part of the tree: use `-Ppackage=...` or `-Pfolder=...` to reduce build time.
+- “Class not found: org.jdom…” → Make sure `jdom-1.1.3.jar` is inside `extlibs/` and you passed `-Djava.ext.dirs="$EXTDIRS"`.
+- “CLASSROOT is null or missing” → Repeat step 3 in the same terminal, then run the build again.
+- Different terminal session? Re-export `CLASSROOT` and `EXTDIRS` after opening a new terminal.
 
 ---
 
