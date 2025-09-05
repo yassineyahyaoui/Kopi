@@ -1,0 +1,119 @@
+[myahiaoui@pc145 Kopi]$ mkdir -p .classroot extlibs
+[myahiaoui@pc145 Kopi]$ export CLASSROOT="$(pwd)/.classroot"
+[myahiaoui@pc145 Kopi]$ export EXTDIRS="$(pwd)/extlibs"
+[myahiaoui@pc145 Kopi]$ echo $CLASSROOT
+/home/myahiaoui/workspace/Kopi/.classroot
+[myahiaoui@pc145 Kopi]$ echo $EXTDIRS
+/home/myahiaoui/workspace/Kopi/extlibs
+[myahiaoui@pc145 Kopi]$ cd "$EXTDIRS"
+[myahiaoui@pc145 extlibs]$ curl -LO https://repo1.maven.org/maven2/jdom/jdom/1.1.3/jdom-1.1.3.jar
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   554  100   554    0     0   1573      0 --:--:-- --:--:-- --:--:--  1573
+[myahiaoui@pc145 extlibs]$ curl -LO https://repo1.maven.org/maven2/gnu/getopt/java-getopt/1.0.14/java-getopt-1.0.14.jar
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   554  100   554    0     0   1671      0 --:--:-- --:--:-- --:--:--  1673
+[myahiaoui@pc145 extlibs]$ ls -l
+total 8
+-rw-r--r-- 1 myahiaoui myahiaoui 554 Sep  5 11:22 java-getopt-1.0.14.jar
+-rw-r--r-- 1 myahiaoui myahiaoui 554 Sep  5 11:21 jdom-1.1.3.jar
+[myahiaoui@pc145 extlibs]$ cd ..
+[myahiaoui@pc145 Kopi]$ ./gradlew run
+Downloading https://services.gradle.org/distributions/gradle-7.2-bin.zip
+..........10%...........20%...........30%...........40%...........50%...........60%...........70%...........80%...........90%...........100%
+
+Welcome to Gradle 7.2!
+
+Here are the highlights of this release:
+ - Toolchain support for Scala
+ - More cache hits when Java source files have platform-specific line endings
+ - More resilient remote HTTP build cache behavior
+
+For more details see https://docs.gradle.org/7.2/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :buildSrc:compileKotlin
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/JFlex.kt: (53, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/Jcc.kt: (47, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/Lexinc.kt: (56, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/MessageGen.kt: (48, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/OptionGen.kt: (52, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/Resources.kt: (47, 11): Parameter 'inputChanges' is never used
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/TokenGen.kt: (53, 5): 'setter for main: String' is deprecated. Deprecated in Java
+w: /home/myahiaoui/workspace/Kopi/buildSrc/src/main/kotlin/org/kopi/gradle/tasks/XkjcCompiler.kt: (62, 5): 'setter for main: String' is deprecated. Deprecated in Java
+
+> Task :buildSrc:jar
+:jar: No valid plugin descriptors were found in META-INF/gradle-plugins
+
+> Task :compileKotlin
+'compileJava' task (current target is 11) and 'compileKotlin' task (current target is 1.8) jvm target compatibility should be set to the same Java version.
+e: Supertypes of the following classes cannot be resolved. Please make sure you have the required dependencies in the classpath:
+    class com.vaadin.flow.server.VaadinServlet, unresolved supertypes: javax.servlet.http.HttpServlet
+    class com.vaadin.flow.server.VaadinSession, unresolved supertypes: javax.servlet.http.HttpSessionBindingListener
+Adding -Xextended-compiler-checks argument might provide additional information.
+
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (41, 1): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (49, 5): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (49, 11): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'com.vaadin.flow.server.VaadinServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (50, 26): Unresolved reference: getInitParameter
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (53, 9): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (53, 21): Unresolved reference: getInitParameter
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (54, 7): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (54, 12): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (55, 7): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (55, 38): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (57, 7): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (60, 41): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (61, 41): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (68, 19): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (68, 28): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (72, 49): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (75, 13): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (75, 36): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (76, 11): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (111, 39): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'org.kopi.vkopi.lib.ui.vaadinflow.base.GaliteServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (127, 15): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (130, 32): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (131, 27): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (134, 27): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (135, 27): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (138, 15): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/base/GaliteServlet.kt: (147, 44): Unresolved reference: getInitParameter
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/form/DBlockDropHandler.kt: (29, 14): Unresolved reference: activation
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/form/DBlockDropHandler.kt: (365, 42): Unresolved reference: MimetypesFileTypeMap
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/DWindow.kt: (872, 25): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/DWindow.kt: (872, 38): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (612, 40): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (614, 24): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (615, 29): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (618, 32): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (618, 45): Cannot access 'javax.servlet.http.HttpSessionBindingListener' which is a supertype of 'com.vaadin.flow.server.VaadinSession'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (636, 26): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'com.vaadin.flow.server.VaadinServlet'. Check your module classpath for missing or conflicting dependencies
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (636, 40): Unresolved reference: getInitParameter
+e: /home/myahiaoui/workspace/Kopi/src/org/kopi/vkopi/lib/ui/vaadinflow/visual/VApplication.kt: (636, 40): Cannot access 'javax.servlet.http.HttpServlet' which is a supertype of 'com.vaadin.flow.server.VaadinServlet'. Check your module classpath for missing or conflicting dependencies
+
+> Task :compileKotlin FAILED
+An error has occured. See the error output logs or try with > gradle --rerun-tasks
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileKotlin'.
+> Compilation error. See log for more details
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.2/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD FAILED in 11m 34s
+7 actionable tasks: 7 executed
+[myahiaoui@pc145 Kopi]$ 
