@@ -17,6 +17,7 @@
  */
 import java.io.ByteArrayOutputStream
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.kopi.gradle.common._project
 import org.kopi.gradle.common.clean
 import org.kopi.gradle.common.withExtension
@@ -47,6 +48,12 @@ apply(from = "declarations.gradle.kts")
 plugins {
   kotlin("jvm") version "1.5.30"
   id("io.spring.dependency-management") version "1.0.10.RELEASE"
+}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
 }
 
 sourceSets.main {
@@ -139,10 +146,14 @@ modules.init()
 
 tasks {
   compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
   }
   compileKotlin {
     destinationDir = file(classRoot!!)
+
+    kotlinOptions {
+      jvmTarget = "11"
+    }
 
     if(jdk7Home != null) {
       sourceCompatibility = "1.7"
@@ -358,6 +369,8 @@ tasks.withType<JavaCompile>().configureEach {
       sourceCompatibility = "1.7"
       targetCompatibility = "1.7"
       forkOptions.javaHome = file(jdk7Home)
+    } else {
+      release.set(11)
     }
     isFork = true
     isFailOnError = true
